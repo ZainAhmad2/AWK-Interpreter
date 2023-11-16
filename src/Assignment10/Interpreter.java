@@ -758,21 +758,24 @@ public class Interpreter {
         }
     }
 
-    public BlockNode InterpretBlock(BlockNode blockNode) throws Exception {
+    public  List<ReturnType> InterpretBlock(BlockNode blockNode) throws Exception {
+        List<ReturnType> returnTypeList = new ArrayList<>();
         HashMap<String, InterpreterDataType> localVariables = new HashMap<>();
         if(blockNode.getConditional().isPresent()){
             boolean trueCondition = blockNode.getConditional().equals("true");
             if(trueCondition) {
                 for (StatementNode statementNode : blockNode.getStatements()) {
-                    ProcessStatement(localVariables, statementNode);
+                   returnTypeList.add(ProcessStatement(localVariables, statementNode));
                 }
+                return returnTypeList;
             }
         }else{
             for (StatementNode statementNode : blockNode.getStatements()) {
-                ProcessStatement(localVariables, statementNode);
+                returnTypeList.add(ProcessStatement(localVariables, statementNode));
             }
+            return returnTypeList;
         }
-        return blockNode;
+        return returnTypeList;
     }
 
     /*public boolean isVariadic() {

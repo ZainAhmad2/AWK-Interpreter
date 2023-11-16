@@ -11,7 +11,6 @@ public class ReturnType {
     }
     public ReturnType(ReturnTypes returnTypes){
         this.returnTypes = returnTypes;
-        this.value = "";
     }
     public ReturnTypes getReturnTypes(){
 
@@ -22,7 +21,10 @@ public class ReturnType {
         return value;
     }
     public String toString(){
-
-        return value + "(" + returnTypes + ")";
+        if(value.isEmpty()){
+            return returnTypes + ";";
+        }else{
+            return returnTypes + value + ";";
+        }
     }
 }

@@ -935,6 +935,41 @@ public class Assignment10JUnits {
     }
     @Test
     public void Test80() throws Exception{
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        StatementNode breakNode = new BreakNode();
+        ReturnType breakResult = interpreter.ProcessStatement(hashMap, breakNode);
+        Assert.assertEquals(ReturnTypes.BREAK, breakResult.getReturnTypes());
+    }
+    @Test
+    public void Test81() throws Exception{
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        StatementNode continueNode = new ContinueNode();
+        ReturnType continueResult = interpreter.ProcessStatement(hashMap, continueNode);
+        Assert.assertEquals(ReturnTypes.CONTINUE, continueResult.getReturnTypes());
+    }
+    @Test
+    public void Test82() throws Exception{
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
 
+        VariableReferenceNode arrayName = new VariableReferenceNode("arr1");
+        InterpreterDataType interpreterArrayDataType = new InterpreterArrayDataType(arrayName.toString());
+        ((InterpreterArrayDataType) interpreterArrayDataType).arrayData.put("arr0", new InterpreterDataType("ValueAtIndex0"));
+        ((InterpreterArrayDataType) interpreterArrayDataType).arrayData.put("arr1", new InterpreterDataType("ValueAtIndex1"));
+        hashMap.put(String.valueOf(arrayName), interpreterArrayDataType);
+
+        DeleteNode deleteNode = new DeleteNode(Optional.of(arrayName));
+
+        ReturnType result = interpreter.ProcessStatement(hashMap, deleteNode);
+
+        Assert.assertTrue(hashMap.containsKey(arrayName));
+        InterpreterArrayDataType updatedArray = (InterpreterArrayDataType) hashMap.get(arrayName);
+        Assert.assertNull(updatedArray.arrayData.get("0"));
+        Assert.assertNotNull(updatedArray.arrayData.get("1"));
     }
 }
