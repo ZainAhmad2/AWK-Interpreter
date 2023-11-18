@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class Interpreter {
     HashMap<String, InterpreterDataType> globalVariables;
     HashMap<String, FunctionDefinitionNode> functionDefinitionNodeHashMap;
-    private HashMap<String, InterpreterDataType> parametersMap = new HashMap<>();
     LineHandler lineHandler;
     private boolean variadic = true;
 
@@ -43,7 +42,6 @@ public class Interpreter {
          * the IADT, goes through all of the elements, and then puts them all together for the string return statement. Finally, it adds them to the hashmap of functions
          * and to the programNode of function blocknodes.
          */
-        //TODO Fix this so that you collect the variable name along with the execution variable -- ALL BuiltIn's
         BuiltInFunctionDefinitionNode printImplementation = new BuiltInFunctionDefinitionNode("print", true, execute -> {
             String printFunction = "";
             InterpreterArrayDataType interpreterArrayDataType = (InterpreterArrayDataType) execute.get("0");
@@ -255,7 +253,7 @@ public class Interpreter {
             return toUpper;
         });
         //toupperImplementation.execute = toupperImplementation::execute;
-        functionDefinitionNodeHashMap.put("", toupperImplementation);
+        functionDefinitionNodeHashMap.put("toupper", toupperImplementation);
         programNode.addFunctionToList(toupperImplementation);
     }
 
@@ -703,73 +701,74 @@ public class Interpreter {
     }
 
     private String runFunctionCall(FunctionCallNode functionCallNode, HashMap<String, InterpreterDataType> localVariables) throws Exception {
-        if (variadic == false) {
+        if (localVariables.containsKey(functionDefinitionNodeHashMap)) {
             FunctionDefinitionNode functionDefinitionNode = new FunctionDefinitionNode();
-            if (!functionDefinitionNode.getParameters().equals(functionCallNode.getParameters())) {
-                throw new RuntimeException("The number of parameters don't match!");
-            }
             HashMap<String, InterpreterDataType> parameters = new HashMap<>();
-            for (String parameterName : functionDefinitionNode.getParameters()) {
-                InterpreterDataType parameterValue = getIDT(functionCallNode, localVariables);
-                parameters.put(parameterName, parameterValue);
-            }
-            if (functionDefinitionNode instanceof BuiltInFunctionDefinitionNode) {
-                return ((BuiltInFunctionDefinitionNode) functionDefinitionNode).execute(parameters);
+            if (variadic == false) {
+                if (functionDefinitionNode instanceof BuiltInFunctionDefinitionNode) {
+                    return ((BuiltInFunctionDefinitionNode) functionDefinitionNode).execute(parameters);
+                } else {
+                    if (!functionDefinitionNode.getParameters().equals(functionCallNode.getParameters())) {
+                        throw new RuntimeException("The number of parameters don't match!");
+                    }
+                    for (String parameterName : functionDefinitionNode.getParameters()) {
+                        InterpreterDataType parameterValue = getIDT(functionCallNode, localVariables);
+                        parameters.put(parameterName, parameterValue);
+                    }
+                    return String.valueOf(InterpretListOfStatements(functionDefinitionNode.getStatementNodes(), parameters));
+                }
             } else {
-                return String.valueOf(InterpretListOfStatements(functionDefinitionNode.getStatementNodes(), parameters));
-            }
-        } else {
-            FunctionDefinitionNode functionDefinitionNode = new FunctionDefinitionNode();
-            if (!functionDefinitionNode.getParameters().equals(functionCallNode.getParameters())) {
-                throw new RuntimeException("The number of parameters don't match!");
-            }
-            HashMap<String, InterpreterDataType> parameters = new HashMap<>();
-            LinkedList<String> parameterNamesList = functionDefinitionNode.getParameters();
-            for (int i = 0; i < parameterNamesList.size() - 1; i++) {
-                String parameterNames = parameterNamesList.get(i);
-                InterpreterDataType parameterValue = getIDT(functionCallNode, localVariables);
-                parameters.put(parameterNames, parameterValue);
-            }
-            InterpreterArrayDataType variadicArray = new InterpreterArrayDataType(parameterNamesList.get(parameterNamesList.size() - 1));
-            for (int i = parameters.size(); i < functionCallNode.getParameters().size(); i++) {
-                InterpreterDataType variadicArgument = getIDT(functionCallNode, localVariables);
-                variadicArray.getArrayData().put(String.valueOf(i - parameters.size()), variadicArgument);
-            }
-            parameters.put(parameterNamesList.get(parameterNamesList.size() - 1), variadicArray);
-            if (functionDefinitionNode instanceof BuiltInFunctionDefinitionNode) {
-                return ((BuiltInFunctionDefinitionNode) functionDefinitionNode).execute(parameters);
-            } else {
+                if (functionDefinitionNode instanceof BuiltInFunctionDefinitionNode) {
+                    return ((BuiltInFunctionDefinitionNode) functionDefinitionNode).execute(parameters);
+                } else {
+                    if (!functionDefinitionNode.getParameters().equals(functionCallNode.getParameters())) {
+                        throw new RuntimeException("The number of parameters don't match!");
+                    }
+                    LinkedList<String> parameterNamesList = functionDefinitionNode.getParameters();
+                    for (int i = 0; i < parameterNamesList.size() - 1; i++) {
+                        String parameterNames = parameterNamesList.get(i);
+                        InterpreterDataType parameterValue = getIDT(functionCallNode, localVariables);
+                        parameters.put(parameterNames, parameterValue);
+                    }
+                    InterpreterArrayDataType variadicArray = new InterpreterArrayDataType(parameterNamesList.get(parameterNamesList.size() - 1));
+                    for (int i = parameters.size(); i < functionCallNode.getParameters().size(); i++) {
+                        InterpreterDataType variadicArgument = getIDT(functionCallNode, localVariables);
+                        variadicArray.getArrayData().put(String.valueOf(i - parameters.size()), variadicArgument);
+                    }
+                    parameters.put(parameterNamesList.get(parameterNamesList.size() - 1), variadicArray);
+                }
                 return String.valueOf(InterpretListOfStatements(functionDefinitionNode.getStatementNodes(), parameters));
             }
         }
+        return null;
     }
 
+
     public void InterpretProgram(ProgramNode programNode) throws Exception {
+        HashMap<String, InterpreterDataType> localVariables = new HashMap<>();
         for (BlockNode BEGINblockNode : programNode.getBegin()) {
-            InterpretBlock(BEGINblockNode);
+            InterpretBlock(BEGINblockNode, localVariables);
         }
         while (lineHandler.SplitAndAssign()) {
             for (BlockNode OTHERblockNode : programNode.getOtherblockNodes()) {
-                InterpretBlock(OTHERblockNode);
+                InterpretBlock(OTHERblockNode, localVariables);
             }
         }
         for (BlockNode ENDblockNode : programNode.getEnd()) {
-            InterpretBlock(ENDblockNode);
+            InterpretBlock(ENDblockNode, localVariables);
         }
     }
 
-    public  List<ReturnType> InterpretBlock(BlockNode blockNode) throws Exception {
+    public List<ReturnType> InterpretBlock(BlockNode blockNode, HashMap<String, InterpreterDataType> localVariables) throws Exception {
         List<ReturnType> returnTypeList = new ArrayList<>();
-        HashMap<String, InterpreterDataType> localVariables = new HashMap<>();
-        if(blockNode.getConditional().isPresent()){
-            boolean trueCondition = blockNode.getConditional().equals("true");
-            if(trueCondition) {
+        if (blockNode!=null) {
+            if (getIDT(blockNode.getConditional().get(), localVariables).equals("true") || getIDT(blockNode.getConditional().get(), localVariables).equals("1")) {
                 for (StatementNode statementNode : blockNode.getStatements()) {
-                   returnTypeList.add(ProcessStatement(localVariables, statementNode));
+                    returnTypeList.add(ProcessStatement(localVariables, statementNode));
                 }
                 return returnTypeList;
             }
-        }else{
+        } else {
             for (StatementNode statementNode : blockNode.getStatements()) {
                 returnTypeList.add(ProcessStatement(localVariables, statementNode));
             }

@@ -15,8 +15,13 @@ class BlockNode extends Node {
     private LinkedList<StatementNode> statements;
     private Optional<Node> conditional;
 
+    public BlockNode(Optional<Node> conditional) {
+        statements = new LinkedList<StatementNode>();
+        this.conditional = conditional;
+    }
     public BlockNode() {
         statements = new LinkedList<StatementNode>();
+        this.conditional = conditional;
     }
 
     public LinkedList<StatementNode> getStatements() {
@@ -86,7 +91,7 @@ class ProgramNode extends Node {
 
     public LinkedList<BlockNode> getBegin() {
 
-        return BEGINblockNodes;
+         return BEGINblockNodes;
     }
 
     public LinkedList<BlockNode> getEnd() {

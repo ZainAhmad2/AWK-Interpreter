@@ -41,9 +41,11 @@ public class Parser {
      */
     public ProgramNode Parser() {
         ProgramNode programNode = new ProgramNode();
-        while (tokenHandler.MoreTokens()) {
+        if (programNode != null) {
             if (!ParseFunction(programNode) && !ParseAction(programNode)) {
                 throw new RuntimeException("Both ended up being false!");
+            } else {
+                return programNode;
             }
         }
         return programNode;
@@ -154,12 +156,12 @@ public class Parser {
             } else {
                 AcceptSeperators();
                 Optional<Node> conditional = ParseOperation();
-                if(conditional.isPresent()){
+                if (conditional.isPresent()) {
                     BlockNode blockNode = ParseBlock();
                     blockNode.setConditional(conditional);
                     programNode.otherBlocks(blockNode);
                     return true;
-                }else{
+                } else {
                     BlockNode blockNode = ParseBlock();
                     programNode.otherBlocks(blockNode);
                     return true;
@@ -297,46 +299,57 @@ public class Parser {
      * @return the specific operation we are looking for.
      */
     public Optional<Node> ParseOperation() {
-        Optional<Node> assignmentNode = AssignmentNodeStuff();
-        Optional<Node> ternaryNode = Ternary();
-        Optional<Node> orAndNode = ORAND();
-        Optional<Node> arrayIndexesNode = ArrayIndexes();
-        Optional<Node> matchOrNotNode = MatchorNot();
-        Optional<Node> comparisonsNode = Comparisons();
-        Optional<Node> stringConcatNode = StringCon();
-        Optional<Node> restofOppsNode = RestofOpps();
-        Optional<Node> postNode = Post();
         //Node x = Expression();
         //System.out.println(x);
+        Optional<Node> assignmentNode = AssignmentNodeStuff();
         if (assignmentNode.isPresent()) {
             Expression();
             return assignmentNode;
-        } else if (ternaryNode.isPresent()) {
+        }
+        Optional<Node> ternaryNode = Ternary();
+        if (ternaryNode.isPresent()) {
             Expression();
             return ternaryNode;
-        } else if (orAndNode.isPresent()) {
+        }
+        Optional<Node> orAndNode = ORAND();
+        if (orAndNode.isPresent()) {
             Expression();
             return orAndNode;
-        } else if (arrayIndexesNode.isPresent()) {
+        }
+        Optional<Node> arrayIndexesNode = ArrayIndexes();
+        if (arrayIndexesNode.isPresent()) {
             Expression();
             return arrayIndexesNode;
-        } else if (matchOrNotNode.isPresent()) {
+        }
+        Optional<Node> matchOrNotNode = MatchorNot();
+        if (matchOrNotNode.isPresent()) {
             Expression();
             return matchOrNotNode;
-        } else if (comparisonsNode.isPresent()) {
+        }
+        Optional<Node> comparisonsNode = Comparisons();
+        if (comparisonsNode.isPresent()) {
             Expression();
             return comparisonsNode;
-        } else if (stringConcatNode.isPresent()) {
+        }
+        Optional<Node> stringConcatNode = StringCon();
+        if (stringConcatNode.isPresent()) {
             Expression();
             return stringConcatNode;
-        } else if (restofOppsNode.isPresent()) {
+        }
+        Optional<Node> restofOppsNode = RestofOpps();
+        if (restofOppsNode.isPresent()) {
             return restofOppsNode;
-        } else if (postNode.isPresent()) {
+        }
+        Optional<Node> postNode = Post();
+        if (postNode.isPresent()) {
             Expression();
             return postNode;
-        } else {
+        }
+        if (assignmentNode.isEmpty() && ternaryNode.isEmpty() && orAndNode.isEmpty() && arrayIndexesNode.isEmpty() && matchOrNotNode.isEmpty()
+                && comparisonsNode.isEmpty() && stringConcatNode.isEmpty() && restofOppsNode.isEmpty() && postNode.isEmpty()) {
             return ParseBottomLevel();
         }
+        return Optional.empty();
     }
 
     public Node Factor() {
@@ -582,37 +595,43 @@ public class Parser {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.LESSTHAN);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.LT);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel, OperationTypes.LT);
                 return Optional.of(operationNode);
             } else if (currentToken.get().getType() == TokenType.LESSEQUAL) {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.LESSEQUAL);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.LE);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel, OperationTypes.LE);
                 return Optional.of(operationNode);
             } else if (currentToken.get().getType() == TokenType.NOTEQUAL) {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.NOTEQUAL);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.NE);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel,  OperationTypes.NE);
                 return Optional.of(operationNode);
             } else if (currentToken.get().getType() == TokenType.DOUBLEEQUALS) {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.DOUBLEEQUALS);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.EQ);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel, OperationTypes.EQ);
                 return Optional.of(operationNode);
             } else if (currentToken.get().getType() == TokenType.GREATERTHAN) {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.GREATERTHAN);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.GT);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel, OperationTypes.GT);
                 return Optional.of(operationNode);
             } else if (currentToken.get().getType() == TokenType.GREATEREQUAL) {
                 Optional<Node> parseBottomLevel = ParseBottomLevel();
                 tokenHandler.MatchAndRemove(TokenType.GREATEREQUAL);
                 //Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.GE);
+                Optional<Node> SecondparseBottomLevel = ParseBottomLevel();
+                OperationNode operationNode = new OperationNode(parseBottomLevel.get(),SecondparseBottomLevel, OperationTypes.GE);
                 return Optional.of(operationNode);
             }
         }
@@ -771,10 +790,12 @@ public class Parser {
             } else {
                 Optional<Node> parseOperation = ParseOperation();
                 if (parseOperation.isPresent()) {
-                    BlockNode blockNode = new BlockNode();
-                    BlockNode secondBlockExpression = new BlockNode();
-                    AssignmentNode assignmentNode = new AssignmentNode(blockNode, secondBlockExpression);
-                    return Optional.of(assignmentNode);
+                    if(parseOperation.get() instanceof AssignmentNode){
+                        BlockNode blockNode = new BlockNode();
+                        return Optional.of((AssignmentNode) parseOperation.get());
+                    }if (parseOperation.get() instanceof FunctionCallNode) {
+                        return Optional.of((FunctionCallNode) parseOperation.get());
+                    }
                 }
 
             }
@@ -812,6 +833,7 @@ public class Parser {
             tokenHandler.MatchAndRemove(TokenType.WHILE);
             tokenHandler.MatchAndRemove(TokenType.OPENPARENTHESIS);
             Optional<Node> parseOperation = ParseOperation();
+            parseBlock.setConditional(parseOperation);
             tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
             AcceptSeperators();
             DoWhileNode DowhileNode = new DoWhileNode(parseOperation, parseBlock);
@@ -834,6 +856,7 @@ public class Parser {
                 Optional<Node> parseOperation = ParseOperation();
                 tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
                 BlockNode parseBlock = ParseBlock();
+                parseBlock.setConditional(parseOperation);
                 WhileNode whileNode = new WhileNode(parseOperation, parseBlock);
                 return Optional.of(whileNode);
             }
@@ -880,6 +903,7 @@ public class Parser {
                     Optional<Node> secondConditional = ParseOperation();
                     tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
                     BlockNode parseBlock = ParseBlock();
+                    parseBlock.setConditional(secondConditional);
                     ForEachNode forEachNode = new ForEachNode(firstConditional, secondConditional, parseBlock);
                     return Optional.of(forEachNode);
                 } else {
@@ -889,6 +913,7 @@ public class Parser {
                     Optional<Node> thirdConditional = ParseOperation();
                     tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
                     BlockNode parseBlock = ParseBlock();
+                    parseBlock.setConditional(thirdConditional);
                     ForNode forNode = new ForNode(firstConditional, secondConditional, thirdConditional, parseBlock);
                     return Optional.of(forNode);
                 }
@@ -915,6 +940,7 @@ public class Parser {
             Optional<Node> parseOperation = ParseOperation();
             tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
             BlockNode blockNode = ParseBlock();
+            blockNode.setConditional(parseOperation);
             IFNode ifNode = new IFNode(parseOperation, blockNode);
             IFNode currentIFNode = ifNode;
             currentToken = tokenHandler.Peek(0);
@@ -927,6 +953,7 @@ public class Parser {
                     parseOperation = ParseOperation();
                     tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
                     blockNode = ParseBlock();
+                    blockNode.setConditional(parseOperation);
                     IFNode elseIFNode = new IFNode(parseOperation, blockNode);
                     currentIFNode.setElseIf(elseIFNode);
                     currentIFNode = elseIFNode;

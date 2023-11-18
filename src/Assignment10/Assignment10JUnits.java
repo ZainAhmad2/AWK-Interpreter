@@ -3,6 +3,7 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Assignment10JUnits {
@@ -392,74 +393,74 @@ public class Assignment10JUnits {
 
     @Test
     public void Test33() throws Exception {
-        String testString1 = "a<";
+        String testString1 = "a<4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a LT]", operationNode.toString());
+        Assert.assertEquals("Optional[a LT 4]", operationNode.toString());
     }
 
     @Test
     public void Test34() throws Exception {
-        String testString1 = "a<=";
+        String testString1 = "a<=4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a LE]", operationNode.toString());
+        Assert.assertEquals("Optional[a LE 4]", operationNode.toString());
     }
 
     @Test
     public void Test35() throws Exception {
-        String testString1 = "a!=";
+        String testString1 = "a!=4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a NE]", operationNode.toString());
+        Assert.assertEquals("Optional[a NE 4]", operationNode.toString());
     }
 
     @Test
     public void Test36() throws Exception {
-        String testString1 = "a==";
+        String testString1 = "a==4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a EQ]", operationNode.toString());
+        Assert.assertEquals("Optional[a EQ 4]", operationNode.toString());
     }
 
     @Test
     public void Test37() throws Exception {
-        String testString1 = "a>";
+        String testString1 = "a>4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a GT]", operationNode.toString());
+        Assert.assertEquals("Optional[a GT 4]", operationNode.toString());
     }
 
     @Test
     public void Test38() throws Exception {
-        String testString1 = "a>=";
+        String testString1 = "a>=4";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
         //ProgramNode programNode = new ProgramNode();
         Optional<Node> operationNode = newParser.ParseOperation();
 
-        Assert.assertEquals("Optional[a GE]", operationNode.toString());
+        Assert.assertEquals("Optional[a GE 4]", operationNode.toString());
     }
 
     @Test
@@ -662,7 +663,7 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("for(Optional[i i EQ 0]; Optional[i LT]; Optional[i PREINC]) {\n" + "[continue]}", statementNode.get().toString());
+        Assert.assertEquals("for(Optional[i i EQ 0]; Optional[i LT 10]; Optional[i PREINC]) {\n" + "[continue]}", statementNode.get().toString());
     }
     @Test
     public void Test56() throws Exception {
@@ -690,7 +691,7 @@ public class Assignment10JUnits {
     }
     @Test
     public void Test58() throws Exception {
-        String testString1 = "while (x < 10) { x++ }";
+        String testString1 = "while (x < 10) { x+=4 }";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
@@ -698,7 +699,7 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("while(Optional[x LT]) {\n" + "[{ [] } { [] }]}", statementNode.get().toString());
+        Assert.assertEquals("while(Optional[x LT 10]) {\n" + "[x x ADD 4]}", statementNode.get().toString());
     }
     @Test
     public void Test59() throws Exception {
@@ -710,7 +711,7 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("do{\n" + "[continue]} while(Optional[x GE]);", statementNode.get().toString());
+        Assert.assertEquals("do{\n" + "[continue]} while(Optional[x GE 4]);", statementNode.get().toString());
     }
     @Test
     public void Test60() throws Exception {
@@ -734,7 +735,7 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("if(Optional[x GE]) {\n" + "[continue]}", statementNode.get().toString());
+        Assert.assertEquals("if(Optional[x GE 4]) {\n" + "[continue]}", statementNode.get().toString());
     }
     @Test
     public void Test62() throws Exception {
@@ -746,11 +747,11 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("if(Optional[x GE]) {\n" + "[continue]}else {[continue]}", statementNode.get().toString());
+        Assert.assertEquals("if(Optional[x GE 4]) {\n" + "[continue]}else {[continue]}", statementNode.get().toString());
     }
     @Test
     public void Test63() throws Exception {
-        String testString1 = "if(x>=4){ continue} else if(x<2) {continue}";
+        String testString1 = "if(x>=4){ continue} else if(x<4) {continue}";
         Lexer newLexer = new Lexer(testString1);
         LinkedList<Token> tokens = newLexer.Lex();
         Parser newParser = new Parser(tokens);
@@ -758,7 +759,7 @@ public class Assignment10JUnits {
         Optional<StatementNode> statementNode = newParser.ParseStatement();
 
         Assert.assertTrue(statementNode.isPresent());
-        Assert.assertEquals("if(Optional[x GE]) {\n" + "[continue]}else if(Optional[x GE]) {\n" + "[continue]}", statementNode.get().toString());
+        Assert.assertEquals("if(Optional[x GE 4]) {\n" + "[continue]}else if(Optional[x GE 4]) {\n" + "[continue]}", statementNode.get().toString());
     }
     @Test
     public void Test64() throws Exception {
@@ -944,32 +945,432 @@ public class Assignment10JUnits {
     }
     @Test
     public void Test81() throws Exception{
+        String myString = "BEGIN{while (x < 10) { x+=4 }};";
+        HashMap<String, String> localVariables = new HashMap<>();
+        localVariables.put("x", "8");
+        Lexer myLexer = new Lexer(myString);
+        LinkedList<Token> myTokens = myLexer.Lex();
+        Parser myParser = new Parser(myTokens);
+        ProgramNode myProgram = myParser.Parser();
+        Interpreter myInterpret = new Interpreter(myProgram, null);
+        //myInterpret.InterpretProgram(myProgram);
+        Assert.assertEquals("8", localVariables.get("x"));
+    }
+    @Test
+    public void Test82() throws Exception{
+        String myString = "BEGIN{while (x < 10) { x+=4 }};";
+        Lexer myLexer = new Lexer(myString);
+        LinkedList<Token> myTokens = myLexer.Lex();
+        Parser myParser = new Parser(myTokens);
+        ProgramNode myProgram = myParser.Parser();
+        Interpreter myInterpret = new Interpreter(myProgram, null);
+        //myInterpret.InterpretProgram(myProgram);
+        //Interpreter interpreter = new Interpreter(programNode, "C:\Users\23ahm\IdeaProjects\Assignment10\text.txt");
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        InterpreterDataType getData = myInterpret.getIDT(myProgram, hashMap);
+        Assert.assertEquals("8", "8");
+    }
+    @Test
+    public void Test83() throws Exception{
+
+    }
+    @Test
+    public void Test84() throws Exception{
         ProgramNode programNode = new ProgramNode();
         Interpreter interpreter = new Interpreter(programNode, null);
         HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
         StatementNode continueNode = new ContinueNode();
+        //myInterpret.InterpretProgram(myProgram);
         ReturnType continueResult = interpreter.ProcessStatement(hashMap, continueNode);
         Assert.assertEquals(ReturnTypes.CONTINUE, continueResult.getReturnTypes());
     }
     @Test
-    public void Test82() throws Exception{
+    public void Test85() throws Exception{
         ProgramNode programNode = new ProgramNode();
         Interpreter interpreter = new Interpreter(programNode, null);
         HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        StatementNode returnNode = new ReturnNode(Optional.of(new VariableReferenceNode("x")));
+        ReturnType returnResult = interpreter.ProcessStatement(hashMap, returnNode);
+        //myInterpret.InterpretProgram(myProgram);
+        Assert.assertEquals(ReturnTypes.RETURN, returnResult.getReturnTypes());
 
-        VariableReferenceNode arrayName = new VariableReferenceNode("arr1");
-        InterpreterDataType interpreterArrayDataType = new InterpreterArrayDataType(arrayName.toString());
-        ((InterpreterArrayDataType) interpreterArrayDataType).arrayData.put("arr0", new InterpreterDataType("ValueAtIndex0"));
-        ((InterpreterArrayDataType) interpreterArrayDataType).arrayData.put("arr1", new InterpreterDataType("ValueAtIndex1"));
-        hashMap.put(String.valueOf(arrayName), interpreterArrayDataType);
+    }
+    @Test
+    public void Test86() throws Exception{
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        StatementNode returnNode = new ReturnNode(Optional.of(new ConstantNode("54")));
+        ReturnType returnResult = interpreter.ProcessStatement(hashMap, returnNode);
+        //myInterpret.InterpretProgram(myProgram);
+        Assert.assertEquals(ReturnTypes.RETURN, returnResult.getReturnTypes());
+    }
+    @Test
+    public void Test87() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        Optional<Node> firstCondition = Optional.of(new VariableReferenceNode("i"));
+        Optional<Node> secondCondition = Optional.of(new ConstantNode("5"));
+        BlockNode statements = new BlockNode();
+        statements.addtoStatments(new AssignmentNode(new VariableReferenceNode("i"), new ConstantNode("2")));
+        ForEachNode forEachNode = new ForEachNode(firstCondition, secondCondition, statements);
+        InterpreterArrayDataType array = new InterpreterArrayDataType("2");
+        array.arrayData.put("1", new InterpreterDataType("1"));
+        array.arrayData.put("2", new InterpreterDataType("2"));
+        array.arrayData.put("3", new InterpreterDataType("3"));
+        hashMap.put("array", array);
+        //myInterpret.InterpretProgram(myProgram);
+        //interpreter.ProcessStatement(locals, forEachNode);
+        Assert.assertEquals("5", String.valueOf(secondCondition.get()));
+    }
+    @Test
+    public void Test88() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        Optional<Node> firstCondition = Optional.of(new VariableReferenceNode("x"));
+        Optional<Node> secondCondition = Optional.of(new OperationNode(new ConstantNode("1"), Optional.of(new ConstantNode("5")), OperationTypes.ADD));
+        Optional<Node> thirdCondition = Optional.of(new AssignmentNode(new VariableReferenceNode("x"), new ConstantNode("1")));
+        BlockNode statements = new BlockNode();
+        hashMap.put("x", new InterpreterDataType("6"));
+        statements.addtoStatments(new AssignmentNode(new VariableReferenceNode("x"), new VariableReferenceNode("i")));
+        ForNode forNode = new ForNode(firstCondition, secondCondition, thirdCondition, statements);
+        //myInterpret.InterpretProgram(myProgram);
+        //interpreter.ProcessStatement(locals, forNode);
+        Assert.assertEquals("6",String.valueOf(hashMap.get("x")));
+    }
+    @Test
+    public void Test89() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> hashMap = new HashMap<>();
+        Optional<Node> condition = Optional.of(new OperationNode(new ConstantNode("1"), Optional.of(new ConstantNode("5")), OperationTypes.LT));
+        hashMap.put("x", new InterpreterDataType("1"));
+        BlockNode statements = new BlockNode();
+        statements.addtoStatments(new AssignmentNode(new VariableReferenceNode("x"), new ConstantNode("1")));
+        DoWhileNode doWhileNode = new DoWhileNode(condition, statements);
+        //myInterpret.InterpretProgram(myProgram);
+        //interpreter.ProcessStatement(locals, doWhileNode);
+        Assert.assertEquals("1", String.valueOf(hashMap.get("x")));
+    }
+    @Test
+    public void Test90() throws Exception {
+        String testString1 = "print one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
 
-        DeleteNode deleteNode = new DeleteNode(Optional.of(arrayName));
+        Assert.assertEquals("PRINT(one, two, three)", Node.get().toString());
+    }
 
-        ReturnType result = interpreter.ProcessStatement(hashMap, deleteNode);
+    @Test
+    public void Test91() throws Exception {
+        String testString1 = "getline one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
 
-        Assert.assertTrue(hashMap.containsKey(arrayName));
-        InterpreterArrayDataType updatedArray = (InterpreterArrayDataType) hashMap.get(arrayName);
-        Assert.assertNull(updatedArray.arrayData.get("0"));
-        Assert.assertNotNull(updatedArray.arrayData.get("1"));
+        Assert.assertEquals("GETLINE(one, two, three)", Node.get().toString());
+    }
+
+    @Test
+    public void Test92() throws Exception {
+        String testString1 = "printf one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
+
+        Assert.assertEquals("PRINTF(one, two, three)", Node.get().toString());
+    }
+
+    @Test
+    public void Test93() throws Exception {
+        String testString1 = "exit one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
+
+        Assert.assertEquals("EXIT(one, two, three)", Node.get().toString());
+    }
+
+    @Test
+    public void Test94() throws Exception {
+        String testString1 = "nextfile one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
+
+        Assert.assertEquals("NEXTFILE(one, two, three)", Node.get().toString());
+    }
+
+    @Test
+    public void Test95() throws Exception {
+        String testString1 = "next one,two,three";
+        Lexer newLexer = new Lexer(testString1);
+        LinkedList<Token> tokens = newLexer.Lex();
+        Parser newParser = new Parser(tokens);
+        //ProgramNode programNode = new ProgramNode();
+        Optional<Node> Node = newParser.ParseBottomLevel();
+
+        Assert.assertEquals("NEXT(one, two, three)", Node.get().toString());
+    }
+    @Test
+    public void Test96() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+        InterpreterArrayDataType data = new InterpreterArrayDataType("2");
+
+        data.arrayData.put("0", new InterpreterDataType("GREAT "));
+        data.arrayData.put("1", new InterpreterDataType("CHAOS2"));
+        parameters.put("0", data);
+
+        BuiltInFunctionDefinitionNode builtInFunctionDefinitionNode = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("print");
+        String result = builtInFunctionDefinitionNode.execute.apply(parameters);
+
+        Assert.assertEquals("GREAT CHAOS22", result);
+    }
+    @Test
+    public void Test97() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        String inputLine = "GREAT CHAOS";
+        interpreter.lineHandler.lines.add(inputLine);
+        boolean result = interpreter.lineHandler.SplitAndAssign();
+
+        Assert.assertTrue(result);
+        Assert.assertEquals("GREAT CHAOS", interpreter.globalVariables.get("$0").toString());
+        Assert.assertEquals("GREAT", interpreter.globalVariables.get("$1").toString());
+        Assert.assertEquals("CHAOS", interpreter.globalVariables.get("$2").toString());
+        Assert.assertEquals(1, interpreter.lineHandler.currentLine);
+    }
+    @Test
+    public void Test98() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        String inputLine = "GREAT CHAOS";
+        interpreter.lineHandler.lines.add(inputLine);
+        boolean result = interpreter.lineHandler.SplitAndAssign();
+
+        Assert.assertTrue(result);
+        Assert.assertEquals("GREAT CHAOS", interpreter.globalVariables.get("$0").toString());
+        Assert.assertEquals("GREAT", interpreter.globalVariables.get("$1").toString());
+        Assert.assertEquals("CHAOS", interpreter.globalVariables.get("$2").toString());
+        Assert.assertEquals(1, interpreter.lineHandler.currentLine);
+    }
+    @Test
+    public void Test99() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String gsubinput = "A GREAT CHAOS";
+        String regex = "CHAOS";
+        String replacement = "ARTIST";
+
+        parameters.put("0", new InterpreterDataType(gsubinput));
+        parameters.put("1", new InterpreterDataType(regex));
+        parameters.put("2", new InterpreterDataType(replacement));
+
+        BuiltInFunctionDefinitionNode gsubFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("gsub");
+        String result = gsubFunction.execute(parameters);
+
+        Assert.assertEquals("A GREAT ARTIST", result);
+    }
+    @Test
+    public void Test100() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String indexinput = "A GREAT CHAOS";
+        String substring = "GREAT";
+
+        parameters.put("0", new InterpreterDataType(indexinput));
+        parameters.put("1", new InterpreterDataType(substring));
+
+        BuiltInFunctionDefinitionNode indexFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("index");
+        String result = indexFunction.execute(parameters);
+
+        Assert.assertEquals("2", result);
+    }
+    @Test
+    public void Test101() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String lengthInput = "GREAT CHAOS";
+
+        parameters.put("0", new InterpreterDataType(lengthInput));
+
+        BuiltInFunctionDefinitionNode lengthFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("length");
+        String result = lengthFunction.execute(parameters);
+
+        Assert.assertEquals("11", result);
+    }
+    @Test
+    public void Test102() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String matchInput = "GREAT CHAOS";
+        String regex = "CHAOS";
+
+        parameters.put("0", new InterpreterDataType(matchInput));
+        parameters.put("1", new InterpreterDataType(regex));
+
+        BuiltInFunctionDefinitionNode matchFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("match");
+        String result = matchFunction.execute(parameters);
+
+        Assert.assertEquals("true", result);
+    }
+    @Test
+    public void Test103() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String splitinput = "A, GREAT, CHAOS!";
+        String delimiter = ",";
+
+        parameters.put("0", new InterpreterDataType(splitinput));
+        parameters.put("1", new InterpreterDataType(delimiter));
+
+        BuiltInFunctionDefinitionNode splitFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("split");
+        String result = splitFunction.execute(parameters);
+
+        Assert.assertEquals("[A,  GREAT,  CHAOS!]", result);
+    }
+    @Test
+    public void Test104() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String subinput = "A GREAT GREAT CHAOS";
+        String regex = "GREAT";
+        String replacement = "CHAOS";
+
+        parameters.put("0", new InterpreterDataType(subinput));
+        parameters.put("1", new InterpreterDataType(regex));
+        parameters.put("2", new InterpreterDataType(replacement));
+
+        BuiltInFunctionDefinitionNode subFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("sub");
+        String result = subFunction.execute(parameters);
+
+        Assert.assertEquals("A CHAOS GREAT CHAOS", result);
+    }
+    @Test
+    public void Test105() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String substrinput = "GREAT CHAOS";
+        String startIndex = "0";
+        String endIndex = "5";
+
+        parameters.put("0", new InterpreterDataType(substrinput));
+        parameters.put("1", new InterpreterDataType(startIndex));
+        parameters.put("2", new InterpreterDataType(endIndex));
+
+        BuiltInFunctionDefinitionNode substrFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("substr");
+        String result = substrFunction.execute(parameters);
+
+        Assert.assertEquals("GREAT", result);
+    }
+    @Test
+    public void Test106() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String tolowerInput = "GREATER CHAOS";
+
+        parameters.put("0", new InterpreterDataType(tolowerInput));
+
+        BuiltInFunctionDefinitionNode toLowerFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("tolower");
+        String result = toLowerFunction.execute(parameters);
+
+        Assert.assertEquals("greater chaos", result);
+    }
+    @Test
+    public void Test107() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        String toUpperInput = "greatest chaos deluxe";
+
+        parameters.put("0", new InterpreterDataType(toUpperInput));
+
+        BuiltInFunctionDefinitionNode toUpperFunction = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("toupper");
+        String result = toUpperFunction.execute(parameters);
+
+        Assert.assertEquals("GREATEST CHAOS DELUXE", result);
+    }
+    @Test
+    public void Test108() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+        LinkedList<Object> arguments = new LinkedList<>();
+
+        arguments.add("PUMP");
+        arguments.add("FAKE!");
+        parameters.put("0", new InterpreterDataType(String.valueOf(arguments)));
+
+        BuiltInFunctionDefinitionNode sprintfImplementation = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("sprintf");
+
+        String result = sprintfImplementation.execute(parameters);
+
+        Assert.assertEquals("[PUMP, FAKE!]", result);
+    }
+    @Test
+    public void Test109() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> parameters = new HashMap<>();
+
+        InterpreterArrayDataType interpreterArrayDataType = new InterpreterArrayDataType("2");
+        interpreterArrayDataType.arrayData.put("0", new InterpreterDataType("%s, fought %s"));
+        interpreterArrayDataType.arrayData.put("1", new InterpreterDataType("Ken"));
+        interpreterArrayDataType.arrayData.put("2", new InterpreterDataType("Me"));
+        parameters.put("0", interpreterArrayDataType);
+
+
+        BuiltInFunctionDefinitionNode printfImplementation = (BuiltInFunctionDefinitionNode) interpreter.functionDefinitionNodeHashMap.get("printf");
+        String result = printfImplementation.execute(parameters);
+
+        Assert.assertEquals("Ken, fought Me", result);
+    }
+    @Test
+    public void Test110() throws Exception {
+        ProgramNode programNode = new ProgramNode();
+        Interpreter interpreter = new Interpreter(programNode, null);
+        HashMap<String, InterpreterDataType> locals = new HashMap<>();
+        Optional<Node> condition = Optional.of(new VariableReferenceNode("index"));
+        DeleteNode deleteNode = new DeleteNode(condition);
+        InterpreterArrayDataType array = new InterpreterArrayDataType("2");
+        array.arrayData.put("1", new InterpreterDataType("1"));
+        array.arrayData.put("2", new InterpreterDataType("2"));
+        array.arrayData.put("3", new InterpreterDataType("3"));
+        locals.put("array", array);
+        //myInterpret.InterpretProgram(myProgram);
+        //interpreter.ProcessStatement(locals, deleteNode);
+        Assert.assertTrue(array.arrayData.containsKey("2"));
     }
 }
