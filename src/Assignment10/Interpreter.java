@@ -690,6 +690,13 @@ public class Interpreter {
         return null;
     }
 
+    /**
+     * Simple loop over the statements while the return type is not equal to none, we "pass up" the actual return type found
+     * @param statements
+     * @param locals
+     * @return statementsReturned
+     * @throws Exception
+     */
     public ReturnType InterpretListOfStatements(LinkedList<StatementNode> statements, HashMap<String, InterpreterDataType> locals) throws Exception {
         for (StatementNode statementsLoop : statements) {
             ReturnType statementsReturned = ProcessStatement(locals, statementsLoop);
@@ -700,6 +707,18 @@ public class Interpreter {
         return new ReturnType(ReturnTypes.NONE);
     }
 
+    /**
+     * The runFunctionCall method is built around the pseudo code provided by Phipps in his directions with a few additions. First, we check
+     * if the local variable that the user is passing through the method already exists in the functionDefinitionNodeHashmap that contains
+     * all of our built-in functions. If it does already exist, we go through the rest of the function call, first checking if the variadic
+     * boolean of arguments is true or false, if it is false we follow the pseudo code almost exactly. If it ends up being true, we know that
+     * we are dealing with print and printf and make an IADT that loops through the entire list of arguments up until the last value, when the
+     * last value in the array is found, we add any remaining values into that array.
+     * @param functionCallNode
+     * @param localVariables
+     * @return String.valueOf(InterpretListOfStatements(functionDefinitionNode.getStatementNodes(), parameters))
+     * @throws Exception
+     */
     private String runFunctionCall(FunctionCallNode functionCallNode, HashMap<String, InterpreterDataType> localVariables) throws Exception {
         if (localVariables.containsKey(functionDefinitionNodeHashMap)) {
             FunctionDefinitionNode functionDefinitionNode = new FunctionDefinitionNode();
@@ -743,7 +762,12 @@ public class Interpreter {
         return null;
     }
 
-
+    /**
+     * Just goes through the BEGIN, END, and OTHER blocks of code passed in by the user. For the other block, we call Split and Assign and for
+     * any record, we call InterpretBlock on each of the blocks. We check for BEGIN first, OTHER next, and then save END for last.
+     * @param programNode
+     * @throws Exception
+     */
     public void InterpretProgram(ProgramNode programNode) throws Exception {
         HashMap<String, InterpreterDataType> localVariables = new HashMap<>();
         for (BlockNode BEGINblockNode : programNode.getBegin()) {
@@ -759,9 +783,19 @@ public class Interpreter {
         }
     }
 
+    /**
+     * This method takes in a list of ReturnTypes that save the results of ProcessStatement to it. This makes the storage of data easier and
+     * also makes it easier to debug it. The code itself checks first if the conditional of the blocknode is empty, then if the result
+     * of the blockNode is true, we do a basic for each loop of the statements, calling ProcessStatement on it and adding it to the list we
+     * made at the start. If there isn't a condition, we do the same loops as before and complete the same steps where we add it to the list.
+     * @param blockNode
+     * @param localVariables
+     * @return returnTypeList
+     * @throws Exception
+     */
     public List<ReturnType> InterpretBlock(BlockNode blockNode, HashMap<String, InterpreterDataType> localVariables) throws Exception {
         List<ReturnType> returnTypeList = new ArrayList<>();
-        if (blockNode!=null) {
+        if (blockNode.getConditional()!=null) {
             if (getIDT(blockNode.getConditional().get(), localVariables).equals("true") || getIDT(blockNode.getConditional().get(), localVariables).equals("1")) {
                 for (StatementNode statementNode : blockNode.getStatements()) {
                     returnTypeList.add(ProcessStatement(localVariables, statementNode));
