@@ -78,9 +78,6 @@ public class StringHandler {
      */
     public String getSubstring(int startPosition, int length) {
         String substring = AWKFILE.substring(startPosition, startPosition+length);
-        //System.out.println(substring);
-        //System.out.println(AWKFILE);
-        //System.out.println(startPosition+ " , " +(startPosition+length));
         return substring;
     }
 }
