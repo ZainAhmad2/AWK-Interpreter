@@ -415,7 +415,7 @@ public class Parser {
 
     /**
      * Rather than have everything in the ParseOperation method, I decided to split each level of the chart into different methods and call them in ParseOperation. For this
-     * particular method, I go through the two character if else-if statement and return the assignment node that lets me return it in the form of the target of the operation
+     * particular method, I go through the two-character if else-if statement and return the assignment node that lets me return it in the form of the target of the operation
      * along with the operation.
      *
      * @return Optional.of(assignmentNode) or Optional.Empty() is nothing is there
@@ -663,7 +663,6 @@ public class Parser {
         }
         return Optional.empty();
     }
-    //This project is one of my Opps
 
     /**
      * Since the operations that I check for here have been successfully created in Expression(), instead of checking for and removing the tokens in this method, I just check
@@ -1155,156 +1154,3 @@ public class Parser {
         return Optional.empty();
     }
 }
-//Old code that didn't work/got lost in the sauce -> Better to just restart + Any other coding problems :)
-    /*boolean ParseFunction(ProgramNode programNode) {
-        LinkedList<String> parameters = new LinkedList<String>();
-        LinkedList<StatementNode> statements = new LinkedList<StatementNode>();
-        String functionName = "";
-        Optional<Token> currentToken = tokenHandler.Peek(0);
-            if (currentToken.isPresent() && currentToken.equals(TokenType.FUNCTION)) {
-                tokenHandler.MatchAndRemove(TokenType.FUNCTION);
-                currentToken = tokenHandler.Peek(0);
-                if (currentToken.isPresent() && currentToken.equals(TokenType.WORD)) {
-                    tokenHandler.MatchAndRemove(TokenType.WORD);
-                    functionName = currentToken.get().getValue();
-                    currentToken = tokenHandler.Peek(0);
-                    if (currentToken.isPresent() && currentToken.equals(TokenType.OPENPARENTHESIS)) {
-                        tokenHandler.MatchAndRemove(TokenType.OPENPARENTHESIS);
-                        currentToken = tokenHandler.Peek(0);
-                        if (currentToken.isPresent() && currentToken.equals(TokenType.CLOSEDPARENTHESIS)) {
-                            tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
-                            currentToken = tokenHandler.Peek(0);
-                            /*AcceptSeperators();
-                            FunctionNode functionNode = new FunctionNode(functionName, parameters);
-                            BlockNode blockNode = ParseBlock();
-                            functionNode.addtoStatement(blockNode.getStatements());
-                            programNode.addFunctionToList(functionNode);
-                            return true;
-                            if (currentToken.isPresent() && currentToken.equals(TokenType.OPENANGLEBRACKET)) {
-                                tokenHandler.MatchAndRemove(TokenType.OPENANGLEBRACKET);
-                                //currentToken = tokenHandler.Peek(0);
-                                AcceptSeperators();
-                            }*/
-                            /*if (currentToken.isPresent() && currentToken.equals(TokenType.CLOSEDANGLEBRACKET)) {
-                                tokenHandler.MatchAndRemove(TokenType.CLOSEDANGLEBRACKET);
-                                //currentToken = tokenHandler.Peek(0);
-                                AcceptSeperators();
-                                FunctionNode functionNode = new FunctionNode(functionName, parameters);
-                                BlockNode blockNode = ParseBlock();
-                                functionNode.addtoStatement(blockNode.getStatements());
-                                programNode.addFunctionToList(functionNode);
-                                return true;
-                            }
-                        }
-                        while (currentToken.isPresent() && currentToken.equals(TokenType.WORD)) {
-                            tokenHandler.MatchAndRemove(TokenType.WORD);
-                            parameters.add(currentToken.get().getValue());
-                            currentToken = tokenHandler.Peek(0);
-                            /*FunctionDefinitionNode functionDefinitionNode = new FunctionDefinitionNode(functionName, parameters);
-                            FunctionNode functionNode = new FunctionNode(functionName, parameters);
-                            programNode.addFunctionToList(functionNode);
-                            if (currentToken.isPresent() && currentToken.equals(TokenType.COMMA)) {
-                                tokenHandler.MatchAndRemove(TokenType.COMMA);
-                            } else {
-                                break;
-                            }
-                            AcceptSeperators();*/
-                        /*}
-                        /*if (currentToken.isPresent() && currentToken.equals(TokenType.CLOSEDPARENTHESIS)) {
-                            tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
-                            AcceptSeperators();
-                            FunctionNode functionNode = new FunctionNode(functionName, parameters);
-                            BlockNode blockNode = ParseBlock();
-                            functionNode.addtoStatement(blockNode.getStatements());
-                            programNode.addFunctionToList(functionNode);
-                            return true;
-                        }
-                    }
-                }
-                if (currentToken.isPresent() && currentToken.equals(TokenType.CLOSEDANGLEBRACKET)) {
-                    tokenHandler.MatchAndRemove(TokenType.CLOSEDANGLEBRACKET);
-                    //currentToken = tokenHandler.Peek(0);
-                    AcceptSeperators();
-                    FunctionNode functionNode = new FunctionNode(functionName, parameters);
-                    BlockNode blockNode = ParseBlock();
-                    functionNode.addtoStatement(blockNode.getStatements());
-                    programNode.addFunctionToList(functionNode);
-                    return true;
-                }
-            }
-        return false;
-    }
-    FROM PARSE OPERATION DAWG!
-    //Parser parser = new Parser(tokens);
-        //System.out.println("Am here");
-   Other stuff
-        /*String functionName = "";
-        LinkedList<String> parameters = new LinkedList<>();
-        if (tokenHandler.MatchAndRemove(TokenType.FUNCTION).isPresent()) {
-            FunctionDefinitionNode functionDefinitionNode = new FunctionDefinitionNode(functionName, parameters);
-            FunctionNode newFunctionNode = new FunctionNode(functionName, parameters);
-            BlockNode blockNode = ParseBlock();
-            programNode.AddingtoFunctionNode(newFunctionNode);
-        return true;*/
-
-//Fixing and moving of stuff with no association:
-/*
-Optional<Token> currentToken = tokenHandler.Peek(1);
-        Optional<Token> previous = tokenHandler.Peek(0);
-        if (currentToken.isPresent()) {
-            if (currentToken.get().getType() == TokenType.DOUBLEPLUS) {
-                Optional<Node> parseBottomLevel = ParseBottomLevel();
-                tokenHandler.MatchAndRemove(TokenType.DOUBLEPLUS);
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.POSTINC);
-                return Optional.of(operationNode);
-            } else if (currentToken.get().getType() == TokenType.DOUBLEMINUS) {
-                tokenHandler.MatchAndRemove(TokenType.DOUBLEMINUS);
-                Optional<Node> parseBottomLevel = ParseBottomLevel();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), OperationTypes.POSTDEC);
-                return Optional.of(operationNode);
-            } else if (currentToken.get().getType() == TokenType.EXPONENT) {
-                tokenHandler.MatchAndRemove(TokenType.EXPONENT);
-                Optional<Node> parseBottomLevel = ParseBottomLevel();
-                Optional<Node> parseOperation = ParseOperation();
-                OperationNode operationNode = new OperationNode(parseBottomLevel.get(), parseOperation, OperationTypes.EXPONENT);
-                return Optional.of(operationNode);
-            } else{
-                    return Optional.empty();
-                }
-            } else {
-                return ParseBottomLevel();
-            }
-        }
-        return Optional.empty();
-    }
-    /*
-    If Statement Block:
-    Optional<Token> currentToken = tokenHandler.Peek(0);
-        if (currentToken.isPresent()) {
-            if (currentToken.get().getType() == TokenType.OPENPARENTHESIS) {
-                tokenHandler.MatchAndRemove(TokenType.OPENPARENTHESIS);
-                Optional<Node> parseOperation = ParseOperation();
-                tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
-                tokenHandler.MatchAndRemove(TokenType.OPENANGLEBRACKET);
-                BlockNode blockNode = new BlockNode();
-                tokenHandler.MatchAndRemove(TokenType.CLOSEDANGLEBRACKET);
-            }
-            if (currentToken.get().getType() == TokenType.ELSE) {
-                if (currentToken.get().getType() == TokenType.IF) {
-                    tokenHandler.MatchAndRemove(TokenType.OPENPARENTHESIS);
-                    Optional<Node> parseOperation = ParseOperation();
-                    tokenHandler.MatchAndRemove(TokenType.CLOSEDPARENTHESIS);
-
-                }
-            } else if (currentToken.get().getType() == TokenType.OPENANGLEBRACKET) {
-                tokenHandler.MatchAndRemove(TokenType.OPENANGLEBRACKET);
-                BlockNode blockNodeInElse = new BlockNode();
-                tokenHandler.MatchAndRemove(TokenType.CLOSEDANGLEBRACKET);
-                 ADD STATEMENT ADDITION HERE
-                return null;
-            }
-            return null;
-        }
-        return Optional.empty();
-    }
- */
