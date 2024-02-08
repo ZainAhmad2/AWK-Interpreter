@@ -30,29 +30,3 @@ public class Main {
         }
     }
 }
-//Dumping ground for code that I tested through the file, can be ignored :)
-//System.out.println(programNode.toString());
-       /*for (FunctionDefinitionNode functionNode : programNode.getFunctions()){
-                System.out.println("this the function name man: "+functionNode.getName());
-                System.out.println("param checked dawg: "+functionNode.getParameters());
-                System.out.println("orignal form of the whole function def: "+functionNode.toString());
-                for (FunctionDefinitionNode functionNode : programNode.getFunctions()){
-            System.out.println("this the function name man: "+functionNode.getName());
-            System.out.println("param checked dawg: "+functionNode.getParameters());
-            System.out.println("orignal form of the whole function def: "+functionNode.toString());
-            System.out.println(parser.AcceptSeperators());
-        }
-                }*/
-      /*BlockNode blockNode = new BlockNode();
-        blockNode.toString();*/
-//TokenHandler newTokenHandler = new TokenHandler(tokens);
-        /*if(peekedToken.isPresent()){
-            System.out.println("Fail!!");
-        }else{
-            System.out.println("Success");
-        }*/
-    /*private static String GetAllBytes(String filename) throws IOException {
-        Path myPath = Paths.get(filename);
-        String content = new String(Files.readAllBytes(myPath));
-        return content;
-    }*/
