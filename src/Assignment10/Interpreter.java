@@ -260,7 +260,7 @@ public class Interpreter {
     public InterpreterDataType getIDT(Node node, HashMap<String, InterpreterDataType> localVariables) throws Exception {
         /**
          * The assignmentNode instanceof first makes sure the left(the target) is an instance of a VariableReferenceNode or an OperationNode with an OperationType of DOLLAR
-         * attatched to it. Once this part is done, we use recursion to be able to get the specific tokens associated with the right side of the assignment and put that value
+         * attached to it. Once this part is done, we use recursion to be able to get the specific tokens associated with the right side of the assignment and put that value
          * into the hashmap of local variables. Finally, we get that value and end up returning that as the result, successfully interpreting the AssignmentNode instance of.
          */
         if (node instanceof AssignmentNode) {
@@ -293,7 +293,7 @@ public class Interpreter {
             /**
              * We first determine what is being held in the boolean conditional, calling getIDT to figure out what is being held and what we are trying to compare. Next, we
              * call getIDT, and determine the true and false case, determining if the values there result in the conditional returning either the true case that we interpreted
-             * or the false case that we interpreted depending on what the condtional ended up becoming.
+             * or the false case that we interpreted depending on what the conditional ended up becoming.
              */
         } else if (node instanceof TernaryNode) {
             TernaryNode ternaryNode = (TernaryNode) node;
@@ -306,9 +306,9 @@ public class Interpreter {
                 return falseCase;
             }
             /**
-             * For the VariableReferenceNode, when the variable is not an array reference, we intialize the variable and put it into the local variable hashmap and then look
+             * For the VariableReferenceNode, when the variable is not an array reference, we initialize the variable and put it into the local variable hashmap, and then look
              * for the value in the localvariable or globalvariable hashmaps. If it does end up being an array reference, we look for the index of the array, set the value of
-             * it to IADT to be able to collect the array data, collect the resolved index by turning it into a string and then looking up that index in the variable's hashmap.
+             * it to IADT to be able to collect the array data, collect the resolved index by turning it into a string, and then look up that index in the variable's hashmap.
              * Also, if it doesn't end up being able to become an IADT, we throw an exception stating that so. If it does end up being correct, we return the array with the
              * data and the proper index we need.
              */
@@ -341,30 +341,30 @@ public class Interpreter {
                 }
             }
             /**
-             * For OperationNode, we first do the comparisons, setting it up as a try-catch statement, where it determines whether the string value that we are passing can be
+             * For OperationNode, we first do the comparisons, setting it up as a try-catch statement, which it determines whether the string value that we are passing can be
              * converted to a float properly. If it can, we compare the float value of the left side along with the float value of the right side. If both sides cannot be
-             * converted we throw a NumberFormatException and compare the string values of the left and right side and return true or false depending on the type of
+             * converted we throw a NumberFormatException and compare the string values of the left and right sides and return true or false depending on the type of
              * comparison we are looking for.
              *
              * Next, for the boolean operations since there is only the left side of the expression we are looking for, we do an else if with if the right side is present, and
              * then do another try catch with the NumberFormatExpression. If it can be converted, we then make sure that the value is not equal to 0.0 and return true if it
-             * doesnt. If it is caught, we just return false for the passed in tokens.
+             * doesn't. If it is caught, we just return false for the passed-in tokens.
              *
              * For match and notmatch, we use Java's builtin regex functions to determine if the left and the right side match with each other. If it doesnt, we return true or
              * false determining on the specific values passed through and the specific operationType we are using to check.
              *
              * For the dollar assignment in my operationNode, I figure out the left side of the operation using getValue and then add the dollar to that left side. This
-             * returns the operationNode with the dollar attatched to in the new IDT.
+             * returns the operationNode with the dollar attached to in the new IDT.
              *
-             * For the six math based operations, I collect the left value, declare the variable in VariableReferenceNode if needed and then use that converted value to actually
+             * For the six math-based operations, I collect the left value, declare the variable in VariableReferenceNode if needed and then use that converted value to actually
              * perform the operation that we need. If there ends up being a right side for the calculation we then add or subtract the left and right side together.
              *
              * Concatenation I get the value of the left and right side of the operation and then combine the two values that I got together. This results in a proper string
              * concatenation.
              *
-             * Finally, for the index of the array in OperatioNode, I check first if the right hand operation is a VariableReferenceNode and has the array available, if it doesnt
-             * end up existing, I throw a RuntimeException saying the right hand side is not an array. I then check for the left value thats being held in the array and determine
-             * if that value actually exists in the local or global variables declared each time VariableReferenceNode is called upon using getIDT. In the end, it should properly
+             * Finally, for the index of the array in OperatioNode, I check first if the right hand operation is a VariableReferenceNode and has the array available, if it doesn't
+             * end up existing, I throw a RuntimeException saying the right hand side is not an array. I then check for the left value that being held in the array and determine
+             * if that value exists in the local or global variables declared each time VariableReferenceNode is called upon using getIDT. In the end, it should properly
              * get an array if it exists and throw an error if it doesnt exist.
              */
         } else if (node instanceof OperationNode) {
@@ -833,7 +833,6 @@ public class Interpreter {
          * The SplitandAssign method works by splitting the current line using the specified field seperator and assigning these values to the neccassary global variables. The
          * method then the NF, the number of fields, and the FNR, the number of records in the file while also keeping track of the current line number and the total number of
          * lines processed.
-         *
          * @return true or false.
          */
         public boolean SplitAndAssign() {
@@ -859,38 +858,3 @@ public class Interpreter {
         }
     }
 }
-/*
-varReferenceOGVersion
-else if(node instanceof VariableReferenceNode){
-            VariableReferenceNode variableReferenceNode = (VariableReferenceNode) node;
-            String variableName = variableReferenceNode.getName();
-            Optional<Node> expressionIndex = variableReferenceNode.getExpressionIndex();
-            if(expressionIndex.isPresent()){
-                InterpreterDataType indexIDT = getIDT(expressionIndex.get(), localVariables);
-                String index = indexIDT.toString();
-                InterpreterDataType LocalVarCheck = localVariables.get(variableName);
-                if(LocalVarCheck instanceof InterpreterArrayDataType){
-
-                }
-            }
-            if (ifNode.getParseOperation().isEmpty() || returnValue.getValue().equals("true")) {
-                ReturnType IFreturnType = InterpretListOfStatements(ifNode.getBlockNode().getStatements(), locals);
-                if (IFreturnType.getReturnTypes() != ReturnTypes.NONE) {
-                    return IFreturnType;
-                }
-            }
-            if (ifNode.getElseIfNode() != null) {
-                IFNode elseIfNode = ifNode.getElseIfNode();
-                ReturnType ElseIfReturnType = ProcessStatement(locals, elseIfNode);
-                if (ElseIfReturnType.getReturnTypes() != ReturnTypes.NONE) {
-                    return ElseIfReturnType;
-                }
-            }
-            if (ifNode.getElseNode() != null) {
-                IFNode elseNode = ifNode.getElseNode();
-                ReturnType elseReturnType = ProcessStatement(locals, elseNode);
-                if (elseReturnType.getReturnTypes() != ReturnTypes.NONE) {
-                    return elseReturnType;
-                }
-            }
- */
