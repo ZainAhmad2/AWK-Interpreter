@@ -428,32 +428,3 @@ class FunctionCallNode extends StatementNode {
         return functionCallPrint;
     }
 }
-/*class FunctionNode extends Node{
-    private String name;
-    private LinkedList<String> parameters;
-    private LinkedList<StatementNode> statements;
-    //BlockNode blockNode;
-    public FunctionNode(String name, LinkedList<String> parameters){
-        this.name = name;
-        this.parameters = parameters;
-    }
-    public LinkedList<String> getParameters() {
-        return parameters;
-    }
-    /*public void addtoStatement(LinkedList<StatementNode> statements){
-        this.statements = statements;
-    }*/
-    /*public void setBlock(BlockNode blockNode){
-        this.blockNode = blockNode;
-    }
-    public String getName(){
-        return name;
-    }
-    public String toString() {
-        StringBuffer parametersAdded = new StringBuffer("");
-        while(parameters.size() >= 0){
-            parametersAdded.append(", "+parameters);
-        }
-        return TokenType.FUNCTION.toString() + " " + name + "(" + parametersAdded + ")";
-    }
-}*/
