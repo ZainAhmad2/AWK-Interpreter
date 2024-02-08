@@ -38,12 +38,4 @@ class InterpreterArrayDataType extends  InterpreterDataType{
 
         return arrayData;
     }
-   /* public void setArrayData(HashMap<String, InterpreterDataType> arrayData){
-
-        this.arrayData = arrayData;
-    }*/
-
-    /*public Object get(int i) {
-        return arrayData.values();
-    }*/
 }
